@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saving the Youth</title>
+    <link href="/css/default.css" rel="stylesheet" type="text/css" />
+    <link href="/css/page.css" rel="stylesheet" type="text/css" />
+    <style>
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-primary, .btn-secondary {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+<div class="login-wrapper">
+    <div class="login-container">
+        <div class="login-content__box">
+            <h2>로그인</h2>
+            <p>가입하신 정보를 입력하여 로그인 해주세요.</p>
+            <form class="login-form__box" onsubmit="return login(event)">
+                <input type="text" id="loginId" placeholder="아이디" />
+                <input type="password" id="password" placeholder="비밀번호" />
+
+                <div class="button-container">
+                    <button type="submit" class="btn-primary">로그인</button>
+                    <a href="/loginForm" class="btn-secondary">회원가입</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function login(event) {
+        event.preventDefault(); // form 기본 전송 막기
+
+        const loginId = document.getElementById("loginId").value;
+        const password = document.getElementById("password").value;
+
+        try {
+            const response = await fetch("/loginTest", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    loginId: loginId,
+                    password: password
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("로그인 실패");
+            }
+
+            const result = await response.text();
+            alert("로그인 성공: " + result);
+            // location.href = "/home"; // 로그인 후 이동
+        } catch (err) {
+            alert("에러: " + err.message);
+        }
+    }
+</script>
+</body>
+</html>

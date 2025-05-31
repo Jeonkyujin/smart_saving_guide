@@ -24,7 +24,7 @@ public class Commodity {
 
     private String Amount;
 
-    private String condition;
+    private String preCondition;
 
     private String category;
 

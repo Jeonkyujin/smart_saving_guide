@@ -1,0 +1,746 @@
+@charset "UTF-8";
+
+/* 메인 페이지 */
+header {
+    display: flex;
+    position: relative;
+    height: 70px;
+    background: #fff;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 1280px;
+    height: 100%;
+    ;
+    margin: 0 auto;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    background: -webkit-linear-gradient(#0083ff, #0043fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+}
+
+.header-menu {
+    display: flex;
+}
+
+.header-menu li {
+    margin: 0 20px;
+}
+
+.header-menu li:last-child {
+    margin-right: 0
+}
+
+.main-section {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background: url('../image/main-visual.jpg')no-repeat center;
+    background-size: cover;
+    padding: 150px 0;
+}
+
+.main-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2)
+}
+
+.content-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 1280px;
+    margin: 0 auto;
+}
+
+.visual-button {
+    display: block;
+    width: 160px;
+    height: 45px;
+    line-height: 45px;
+    border-radius: 10px;
+    background: #4f4f4f;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.visual-text1 {
+    font-size: 30px;
+    color: #fff;
+}
+
+.visual-text2 {
+    font-size: 50px;
+    font-weight: bold;
+    color: #005bfe;
+    margin: 10px 0;
+}
+
+.visual-text3 {
+    font-size: 40px;
+    color: #fff;
+}
+
+.first-section {
+    padding: 70px 0;
+}
+
+.main-title {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.main-title span {
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 5px;
+    color: #737373;
+    display: block;
+}
+
+.main-title::after {
+    content: "";
+    display: block;
+    width: 100px;
+    height: 5px;
+    background: #3d6ff9;
+    margin: 20px auto;
+}
+
+.quiz-banner {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 40px 0;
+    background: url('../image/quiz.png')no-repeat right #507df9;
+    background-size: 220px;
+    background-position-x: 70%;
+    text-align: center;
+
+}
+
+.quiz-title {
+    font-size: 18px;
+    color: #fff;
+}
+
+.quiz-text {
+    font-size: 25px;
+    font-weight: bold;
+    color: #fff;
+    margin: 5px 0 20px 0;
+}
+
+.quiz-button {
+    display: block;
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 10px;
+    background: #ff5c5c;
+    color: #fff;
+    margin: 0 auto;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.product-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-item {
+    width: 25%;
+    border: 1px solid #e3e3e3;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+    min-height: 150px;
+}
+
+.product-item img {
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+.product-item a {
+    display: flex;
+    width: 110px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    height: 30px;
+    line-height: 30px;
+    background: #6382d7;
+    color: #fff;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.product-item a.active span {
+    background: #fd3b3b
+}
+
+.product-item a.active span::before,
+.product-item a.active span::after {
+    background: #fd3b3b
+}
+
+.product-item a span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #f9f9f9;
+    position: relative;
+    transform: rotate(45deg);
+    font-size: 0;
+}
+
+.product-item a span::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    left: -50%;
+    border-radius: 50%;
+    background: #f9f9f9;
+}
+
+.product-item a span::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    right: 0;
+    top: -50%;
+    border-radius: 50%;
+    background: #f9f9f9;
+}
+
+.product-item dl {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.product-item dt {
+    width: 30%;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.product-item dd {
+    width: 70%;
+}
+
+
+
+/* footer */
+footer {
+    width: 100%;
+    background: #e6e6e6;
+    padding: 50px 0;
+}
+
+.footer-logo {
+    font-size: 25px;
+    font-weight: bold;
+    color: #71788b;
+}
+
+.copyright {
+    font-size: 15px;
+    color: #71788b;
+    margin-top: 20px;
+}
+
+/* 로그인 페이지 */
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5
+}
+
+.login-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 80%;
+    background: #fff;
+    border-radius: 50px;
+    box-shadow: 1px 5px 10px rgba(0, 0, 0, 0.1);
+    padding: 50px 0;
+    overflow-y: auto;
+}
+
+.login-container.auto {
+    align-items:baseline
+}
+
+.login-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.login-container::-webkit-scrollbar-thumb {
+    height: 30%;
+    border-radius: 10px;
+    background: #848484;
+}
+
+.login-container::-webkit-scrollbar-track {
+    background: #84848447;
+    border-radius: 10px;
+}
+
+
+.login-content__box {
+    width: 450px;
+    text-align: center;
+}
+
+.login-wrapper h2 {
+    font-size: 50px;
+    font-weight: bold;
+    background: -webkit-linear-gradient(#0083ff, #0043fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.login-wrapper p {
+    font-size: 16px;
+    color: #a7a7a7;
+    margin: 10px 0 30px 0
+}
+
+.login-form__box {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-form__box input {
+    width: 100%;
+    height: 45px;
+    border: 1px solid #e3e3e3;
+    border-radius: 10px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #a7a7a7
+}
+
+.login-form__box input:nth-child(2) {
+    margin: 15px 0;
+}
+
+.login-form__box button {
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(90deg, rgba(0, 131, 255, 1) 0%, rgba(0, 67, 254, 1) 100%);
+    border-radius: 10px;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+}
+
+.home-button {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 40px;
+    height: 40px;
+}
+
+.home-button img {
+    width: 100%
+}
+
+/* 회원가입 */
+.join-form__box {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label__box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.form-label__box label {
+    width: 20%;
+    text-align: left;
+}
+
+.join-form__box .input-style {
+    width: 80%;
+    height: 45px;
+    border: 1px solid #e3e3e3;
+    border-radius: 10px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #a7a7a7
+}
+
+.join-form__box .input-style2 {
+    width: 100%;
+    height: 45px;
+    border: 1px solid #e3e3e3;
+    border-radius: 10px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    font-size: 14px;
+    color: #a7a7a7;
+    margin-bottom: 15px;
+}
+
+.join-form__box .label-title {
+    display: block;
+    width: 100%;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: left;
+    margin: 10px 0;
+    color: #434343;
+}
+
+.checkbox-container {
+    font-size: 14px;
+    color: #7b7b7b;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+
+.join-form__box button {
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(90deg, rgba(0, 131, 255, 1) 0%, rgba(0, 67, 254, 1) 100%);
+    border-radius: 10px;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+}
+
+/* 추천상품 페이지 */
+.sub-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 250px;
+    background: url('/images/sub-bg.jpg')no-repeat center;
+}
+
+.sub-section.sub2 {
+    background: url('/images/sub-bg2.jpg')no-repeat center;
+}
+
+.sub-section.sub3 {
+    background: url('/images/sub-bg3.jpg')no-repeat center;
+}
+
+.sub-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.2)
+}
+
+.sub-title {
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    color: #fff;
+}
+
+.sub-text {
+    text-align: center;
+    color: #f9f9f9;
+    margin-top: 10px;
+}
+
+.sub-content {
+    padding: 50px 0;
+}
+
+.tab-menu {
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    list-style: none;
+    padding: 0;
+}
+
+.tab-menu li {
+    padding: 10px 50px;
+    border: 1px solid #ccc;
+    margin: 0 10px;
+}
+
+.tab-content {
+    padding: 50px 0;
+    display: none;
+}
+
+.active {
+    display: block;
+}
+
+.selected {
+    background-color: #4b73e3;
+    font-weight: bold;
+    color: #fff;
+}
+
+.search-bar {
+    text-align: right;
+    border: 1px solid #e3e3e3;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 50px 0
+}
+
+.search-bar input,
+.search-bar select,
+.search-bar button {
+    height: 40px;
+    border: 1px solid #e3e3e3;
+    padding: 0 10px;
+    border-radius: 5px;
+    color: #101010
+}
+
+.search-bar button {
+    width: 80px;
+    background: #4b73e3;
+    color: #fff;
+    cursor: pointer;
+    border: none
+}
+
+.result {
+    font-size: 20px;
+    color: #101010;
+    text-align: center;
+}
+
+
+/* 퀴즈 페이지 */
+.quiz-container {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: unset;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 1400px;
+    /* Adjust to increase maximum width */
+    min-width: 600px;
+    /* Set a minimum width for larger form appearance */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    height: auto
+}
+
+.quiz-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    background: #6b8ff5;
+    border-radius: 50px;
+    box-shadow: 1px 5px 10px rgba(0, 0, 0, 0.1);
+    padding: 50px 0;
+}
+
+.quiz-content__title {
+    font-size: 30px;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 50px;
+}
+
+.quiz-content form {
+    width: 100%;
+    padding: 0 50px;
+}
+
+.quiz-content form h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.quiz-option {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    background: #f5f5f5;
+    margin-bottom: 10px;
+}
+
+.quiz-option label {
+    margin-left: 5px;
+}
+
+.quiz-content button {
+    position: relative;
+    width: 300px;
+    height: 50px;
+    background: #f96666;
+    color: #fff;
+    border-radius: 100px;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.result-text {
+    font-size: 20px;
+    color: #fff;
+}
+
+.result-content {
+    width: 100%;
+    padding: 0 50px;
+    margin-top: 50px;
+}
+
+.result-text1,
+.result-text2 {
+    display: flex;
+    align-items: center;
+    line-height: 50px;
+    background: #f5f5f5;
+    margin-bottom: 10px;
+    padding: 0 20px;
+}
+
+.result-text1 b,
+.result-text2 b {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-weight: bold;
+    background: #769aff;
+    color: #fff;
+    border-radius: 100px;
+    margin-right: 10px;
+}
+
+.result-text2 b {
+    background: #ff5c5c
+}
+
+.result-text3 {
+    color: #fff;
+    margin: 30px 0
+}
+
+.result-text3 span {
+    color: #fff;
+}
+
+/* 마이페이지 */
+.mypage-container {
+    padding: 50px 0;
+}
+
+.mypage-content button {
+    width: 150px;
+    height: 40px;
+    background: #507df9;
+    color: #fff;
+    border: none;
+    font-size: 15px;
+    border-radius: 5px;
+}
+
+.mypage-content p {
+    margin: 20px 0;
+}
+
+.mypage-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.mypage-content table th {
+    width: 15%;
+    text-align: left;
+    padding: 20px;
+    background: #f6f6f6;
+    border: 1px solid #e3e3e3;
+    vertical-align: middle;
+}
+
+.mypage-content table td {
+    width: 85%;
+    text-align: left;
+    padding: 20px;
+    border: 1px solid #e3e3e3;
+}
+
+.mypage-title {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.mypage-content input {
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+    height: 40px;
+    padding: 0 20px
+}
+
+.mypage-content input.max {
+    width:300px
+    }
+
+.input-box {
+    display: flex;
+    align-items: center;
+}
