@@ -36,7 +36,6 @@ public class GlobalExceptionHandler {
             HttpMessageNotReadableException.class,
             MissingRequestHeaderException.class,
             MethodArgumentNotValidException.class,
-            NoHandlerFoundException.class,
             BusinessException.class,
     })
     public String handleAllCustomExceptions(Exception ex, Model model, HttpServletRequest request) {
