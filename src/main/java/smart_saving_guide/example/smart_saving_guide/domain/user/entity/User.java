@@ -22,19 +22,17 @@ public class User extends BaseEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String login_id;
+    private String loginId;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
 
-    @Column(nullable = false)
     private String profile;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private SocialType socialType;
 
     @Enumerated(EnumType.STRING)
@@ -46,8 +44,8 @@ public class User extends BaseEntity {
 
 
     @Builder
-    public User(String login_id, String password, String email, SocialType socialType, Role role) {
-        this.login_id = login_id;
+    public User(String loginId, String password, String email, SocialType socialType, Role role) {
+        this.loginId = loginId;
         this.password = password;
         this.email = email;
         this.socialType = socialType;

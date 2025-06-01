@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: headerContent}"></head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saving the Youth</title>
+    <link href="/css/default.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/page.css" rel="stylesheet" type="text/css"/>
+    <style>
+        .input-group {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 0.5rem; /* 간격 추가 */
+        }
+
+        .input-style {
+            flex: 2;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .button-style {
+            flex: 1;
+        }
+
+
+        .form-label__box {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .form-label__box label {
+            flex: 0 0 20%;
+            text-align: left;
+        }
+
+        .form-label__box .input-style {
+            flex: 1;
+        }
+
+        .full-width {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        .button {
+            padding: 0.5rem 1rem;
+            font-size: 1.2rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 0.3rem;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+<div class="login-wrapper">
+    <div class="login-container auto">
+        <div class="login-content__box">
+            <h2>회원가입</h2>
+            <p>사용자 정보를 입력해주세요.</p>
+            <form th:action="@{/loginForm}" th:object="${userForm}" method="post" class="join-form__box" onsubmit="return valid()">
+                <!-- 아이디 입력 -->
+                <div class="form-label__box">
+                    <label th:for="loginId">아이디</label>
+                    <div class="input-group">
+                        <input type="text" id = "userid" th:field="*{loginId}" placeholder="아이디를 입력하세요"
+                               class="input-style" aria-label="아이디">
+                        <button type = "button" class = "button-style" onclick="sameCheck()">중복 확인</button>
+                    </div>
+
+                </div>
+                <!-- 비밀번호 입력 -->
+                <div class="form-label__box">
+                    <label th:for="password1">비밀번호</label>
+                    <input type="password" th:field="*{password1}" placeholder="비밀번호를 입력하세요"
+                           class="input-style" aria-label="비밀번호">
+                </div>
+
+                <!-- 비밀번호 확인 -->
+                <div class="form-label__box">
+                    <label th:for="password2">비밀번호 확인</label>
+                    <input type="password" th:field="*{password2}" placeholder="비밀번호를 입력하세요"
+                           class="input-style" aria-label="비밀번호">
+                </div>
+
+
+                <!-- 제출 버튼 -->
+                <div style="text-align: center;">
+                    <button type="submit" class="button">회원가입</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    let submitCheck = false;
+
+
+    function valid() {
+        if (submitCheck) {
+            return true;
+        } else {
+            alert('아이디 중복확인을 해주세요.');
+            return false;
+        }
+    }
+    function sameCheck() {
+        let userid = $('#userid').val()
+
+        $.ajax({
+            type: "get",
+            url: "/IDCheck?userid=" + userid
+        }).done((res) => {
+            if (res.data === true) {
+                alert(res.msg);
+                submitCheck = true;
+            } else {
+                alert(res.msg);
+                submitCheck = false;
+            }
+
+        }).fail((err) => {
+            console.log('상태코드 200밖에 없어서 실행 안됨')
+        });
+    }
+
+</script>
+</body>
+
+</html>

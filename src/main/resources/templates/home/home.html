@@ -46,7 +46,7 @@
         <div class="login-content__box">
             <h2>로그인</h2>
             <p>가입하신 정보를 입력하여 로그인 해주세요.</p>
-            <form class="login-form__box" onsubmit="return login(event)">
+            <form class="login-form__box" action="/login" method = "POST">
                 <input type="text" id="loginId" placeholder="아이디" />
                 <input type="password" id="password" placeholder="비밀번호" />
 
@@ -59,36 +59,5 @@
     </div>
 </div>
 
-<script>
-    async function login(event) {
-        event.preventDefault(); // form 기본 전송 막기
-
-        const loginId = document.getElementById("loginId").value;
-        const password = document.getElementById("password").value;
-
-        try {
-            const response = await fetch("/loginTest", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    loginId: loginId,
-                    password: password
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error("로그인 실패");
-            }
-
-            const result = await response.text();
-            alert("로그인 성공: " + result);
-            // location.href = "/home"; // 로그인 후 이동
-        } catch (err) {
-            alert("에러: " + err.message);
-        }
-    }
-</script>
 </body>
 </html>
