@@ -11,10 +11,16 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import smart_saving_guide.example.smart_saving_guide.domain.auth.handler.DelegatingOAuth2LoginSuccessHandler;
+import smart_saving_guide.example.smart_saving_guide.domain.auth.service.OAuthUserService;
 import smart_saving_guide.example.smart_saving_guide.domain.user.repository.UserRepository;
 import smart_saving_guide.example.smart_saving_guide.global.security.jwt.filter.JwtAuthenticationFilter;
 import smart_saving_guide.example.smart_saving_guide.global.security.jwt.filter.JwtAuthorizationFilter;
+import smart_saving_guide.example.smart_saving_guide.global.security.jwt.provider.JwtTokenProvider;
+import smart_saving_guide.example.smart_saving_guide.global.security.jwt.repository.RefreshTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -22,11 +28,12 @@ import smart_saving_guide.example.smart_saving_guide.global.security.jwt.filter.
 public class SecurityConfig {
 
     private final UserRepository userRepository;
+    private final OAuthUserService OAuth2UserService;
+    private final DelegatingOAuth2LoginSuccessHandler delegatingOAuth2LoginSuccessHandler;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -36,18 +43,21 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
 
-        JwtAuthenticationFilter jwtAuthFilter = new JwtAuthenticationFilter(authenticationManager);
-        JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(authenticationManager, userRepository);
+        JwtAuthenticationFilter jwtAuthFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider,refreshTokenRepository);
+        JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(jwtTokenProvider);
         jwtAuthFilter.setFilterProcessesUrl("/login");
 
         http.csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/", "/loginForm", "/css/**", "/js/**", "/images/**", "IDCheck").permitAll()
+                        request.requestMatchers("/", "/loginForm", "/css/**", "/js/**", "/images/**", "IDCheck", "/oauth2/**", "/login/**").permitAll()
                                 .anyRequest().authenticated())
-                .addFilterBefore(jwtAuthFilter, JwtAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthorizationFilter, JwtAuthorizationFilter.class);
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo.userService(OAuth2UserService))
+                        .successHandler(delegatingOAuth2LoginSuccessHandler))
+                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter, JwtAuthorizationFilter.class);
         return http.build();
     }
 }

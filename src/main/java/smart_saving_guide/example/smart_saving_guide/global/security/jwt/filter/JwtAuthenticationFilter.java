@@ -1,7 +1,6 @@
 package smart_saving_guide.example.smart_saving_guide.global.security.jwt.filter;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -14,17 +13,24 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import smart_saving_guide.example.smart_saving_guide.domain.auth.service.PrincipalDetails;
+import smart_saving_guide.example.smart_saving_guide.global.security.jwt.entity.RefreshToken;
+import smart_saving_guide.example.smart_saving_guide.global.security.jwt.entity.Token;
+import smart_saving_guide.example.smart_saving_guide.global.security.jwt.provider.JwtTokenProvider;
+import smart_saving_guide.example.smart_saving_guide.global.security.jwt.repository.RefreshTokenRepository;
 
 import java.io.IOException;
-import java.util.Date;
+
 
 //스프링 시큐리티에서 UsernamePasswordAuthenticationFilter가 있음
 // /login 요청해서 username, password 전송하면(post)
 //usernamePasswordAuthenticationFilter 동작을 함
+
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
     private final AuthenticationManager authenticationManager;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
+
 
     //login 요청을 하면 로그인 시도를 위해서 실행되는 함수
     @Override
@@ -56,21 +62,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         System.out.println("successfulAuthentication 이 실행됨");
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
-        // RSA 방식은 아니고 Hash암호방식
-        String jwtToken = JWT.create() // pom.xml
-                .withSubject("cos토큰")
-                .withExpiresAt(new Date(System.currentTimeMillis()+ (60000 * 10))) //1분 * 10
-                .withClaim("id", principalDetails.getUser().getId())
-                .withClaim("username", principalDetails.getUser().getLoginId())
-                .sign(Algorithm.HMAC512("cos")); // HMAC512는 시크릿 키가 있어야 함.
+        Token jwtToken = jwtTokenProvider.createToken(principalDetails.getUser().getId(), principalDetails.getUser().getRole());
+        String newAccessToken = jwtToken.getAccessToken();
+        String newRefreshToken = jwtToken.getRefreshToken();
 
-        Cookie jwtCookie = new Cookie("Authorization", jwtToken);
-        jwtCookie.setHttpOnly(true);     // JS에서 접근 못하도록 보안 강화
-        jwtCookie.setPath("/");
-        jwtCookie.setMaxAge(600);        // 초 단위
-        response.addCookie(jwtCookie);
+//        Cookie jwtCookie = new Cookie("Authorization", newAccessToken);
+//        jwtCookie.setHttpOnly(true);     // JS에서 접근 못하도록 보안 강화
+//        jwtCookie.setPath("/");
+//        jwtCookie.setMaxAge(600);        // 초 단위
+//        response.addCookie(jwtCookie);
+        response.setHeader("Authorization", "Bearer " + newAccessToken);
 
-        response.sendRedirect("/main");
+        //리프레시 토큰은 redis로 구현한 refreshTokenRepository에 저장하는 코드 작성
+        RefreshToken refreshToken = new RefreshToken(newRefreshToken, principalDetails.getUser().getId());
+        refreshTokenRepository.save(refreshToken);
+
+        //response.sendRedirect("/main");
 
     }
 }

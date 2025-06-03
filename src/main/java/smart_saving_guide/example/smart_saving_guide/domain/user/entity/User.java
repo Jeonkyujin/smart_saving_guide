@@ -24,7 +24,6 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String loginId;
 
-    @Column(nullable = false)
     private String password;
 
     @Column(unique = true)
@@ -44,11 +43,12 @@ public class User extends BaseEntity {
 
 
     @Builder
-    public User(String loginId, String password, String email, SocialType socialType, Role role) {
+    public User(String loginId, String password, String email, SocialType socialType, String profile, Role role) {
         this.loginId = loginId;
         this.password = password;
         this.email = email;
         this.socialType = socialType;
+        this.profile = profile;
         this.role = role;
     }
 
