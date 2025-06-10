@@ -1,9 +1,12 @@
 package smart_saving_guide.example.smart_saving_guide.domain.auth.service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -57,21 +60,36 @@ public class KakaoOAuth2UserService extends AbstractOAuth2UserService {
 			.build();
 		User newUser = userService.createUserForOAuth(user);
 
+		// ❗️provider 확인용 일회용 Authentication 저장
+		Authentication tempAuth = new UsernamePasswordAuthenticationToken(
+				new PrincipalDetails(user), null, List.of(new SimpleGrantedAuthority("ROLE_USER"))
+		);
+		SecurityContextHolder.getContext().setAuthentication(tempAuth);
+
+		response.sendRedirect("/oauth-success.html");
+
+
 		//jwt 토큰 생성
 		Token jwtToken = jwtTokenProvider.createToken(newUser.getId(), newUser.getRole());
 		String newAccessToken = jwtToken.getAccessToken();
 		String newRefreshToken = jwtToken.getRefreshToken();
 
-		authentication = jwtTokenProvider.getAuthentication(newAccessToken);
+		//authentication = jwtTokenProvider.getAuthentication(newAccessToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		response.setHeader(accessTokenHeader, "Bearer " + newAccessToken);
+		//response.setHeader(accessTokenHeader, "Bearer " + newAccessToken);
+		addAccessTokenToCookie(newAccessToken, response);
+		//RefreshToken refreshToken = new RefreshToken(newRefreshToken, newUser.getId());
+		//refreshTokenRepository.save(refreshToken);
+		//addRefreshTokenToCookie(newRefreshToken, response);
 
-		RefreshToken refreshToken = new RefreshToken(newRefreshToken, newUser.getId());
-		refreshTokenRepository.save(refreshToken);
-		addRefreshTokenToCookie(newRefreshToken, response);
-
+		//response.setContentType("application/json");
+		//response.setCharacterEncoding("UTF-8");
+		//response.getWriter().write(
+		//		objectMapper.writeValueAsString(newAccessToken)
+		//);
 		//String redirectUrl = determineRedirectUrl(request);
 		//log.debug("[Kakao OAuth2] 리다이렉션 URL: {}", redirectUrl);
-		//response.sendRedirect(redirectUrl);
+		//response.sendRedirect(redirectUrl);*/
+		response.sendRedirect("/main");
 	}
 }

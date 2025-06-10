@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByLoginId(String login_id);
 
+    User findByEmail(String email);
+
     @Query("select u From User u where u.socialType = :socialType AND u.email = :email")
     User findBySocialTypeAndEmail(@Param("socialType")SocialType socialType, @Param("email") String email);
 }

@@ -36,8 +36,8 @@ import static smart_saving_guide.example.smart_saving_guide.global.error.GlobalE
 
 
 @Slf4j
-@Component
-@RequiredArgsConstructor
+
+
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private static final String[] WHITE_LIST = {
@@ -48,23 +48,38 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             "/images/**",
             "/IDCheck",
             "/oauth2/**",
-            "/login/**"
+            "/login/**",
+            "/oauth-success.html",
+            "/normal-success.html",
+            "/token/**"
 
     };
 
     private final JwtTokenProvider tokenProvider;
 
+    public JwtAuthorizationFilter(JwtTokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
+
         // white list 또는 인증/로그인 관련 경로면 토큰 검증을 건너뜁니다.
         if (shouldNotFilter(request)) {
+
             filterChain.doFilter(request, response);
             return;
         }
-        String accessToken = tokenProvider.extractAccessTokenFromHeader(request);
+        String accessToken = tokenProvider.extractAccessTokenFromCookie(request);
+
+
+
+
         log.debug("[Token] JwtAuthorizationFilter 토큰 검증 accessToken : {}", accessToken);
         TokenStatus tokenStatus = tokenProvider.validateAccessToken(accessToken);
+        //시큐리티 컨텍스트에 인증 객체를 담는 것은 매 요청마다 필수적으로 해줘야함
         if (tokenStatus == TokenStatus.VALID) {
             setAuthentication(accessToken);
         } else if (tokenStatus == TokenStatus.EXPIRED) {
@@ -72,11 +87,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         } else {
             throw new TokenException(INVALID_TOKEN);
         }
-
+        System.out.println("not error");
         filterChain.doFilter(request, response);
     }
 
     private void setAuthentication(String accessToken) {
+
         try {
             Authentication authentication = tokenProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -91,6 +107,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String uri = request.getRequestURI();
         log.trace("[Request] 요청 경로, 메서드: {} {}", uri, request.getMethod());
+
         return isWhiteList(request);
     }
 

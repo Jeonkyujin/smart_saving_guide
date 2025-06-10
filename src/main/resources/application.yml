@@ -58,6 +58,7 @@ token:
   access:
     expiration: ${JWT_ACCESS_TOKEN_EXPIRATION}
     header: Authorization
+
   refresh:
     expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
     cookie:

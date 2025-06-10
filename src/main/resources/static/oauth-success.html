@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 처리 중...</title>
+</head>
+<body>
+<p>로그인 중입니다... 잠시만 기다려주세요.</p>
+
+<script>
+    // 세션에 인증 정보가 있을 경우 /api/token 요청
+    fetch("/token/oauth", {
+        method: "GET",
+        credentials: "include"
+    })
+        .then(res => {
+            if (!res.ok) throw new Error("토큰 요청 실패");
+            return res.json();
+        })
+        .then(data => {
+            localStorage.setItem("accessToken", data.accessToken);
+            // 토큰 저장 후 메인 페이지로 이동
+            window.location.href = "/main";
+        })
+        .catch(err => {
+            alert("로그인 처리 실패: " + err.message);
+            window.location.href = "/";
+        });
+</script>
+</body>
+</html>

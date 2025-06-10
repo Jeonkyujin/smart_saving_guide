@@ -1,8 +1,12 @@
 package smart_saving_guide.example.smart_saving_guide.domain.auth.service;
 
 import java.io.IOException;
+import java.util.List;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -50,22 +54,38 @@ public class GoogleOAuth2UserService extends AbstractOAuth2UserService {
 			.build();
 		User newUser = userService.createUserForOAuth(user);
 
+
+
 		//jwt 토큰 생성
 		Token jwtToken = jwtTokenProvider.createToken(newUser.getId(), newUser.getRole());
 		String newAccessToken = jwtToken.getAccessToken();
 		String newRefreshToken = jwtToken.getRefreshToken();
 
-		authentication = jwtTokenProvider.getAuthentication(newAccessToken);
+		//authentication = jwtTokenProvider.getAuthentication(newAccessToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		response.setHeader(accessTokenHeader, "Bearer " + newAccessToken);
-
-		RefreshToken refreshToken = new RefreshToken(newRefreshToken, newUser.getId());
-		refreshTokenRepository.save(refreshToken);
-		addRefreshTokenToCookie(newRefreshToken, response);
+		//response.setHeader(accessTokenHeader, "Bearer " + newAccessToken);
+		addAccessTokenToCookie(newAccessToken, response);
+		//RefreshToken refreshToken = new RefreshToken(newRefreshToken, newUser.getId());
+		//refreshTokenRepository.save(refreshToken);
+		//addRefreshTokenToCookie(newRefreshToken, response);
 
 		//String redirectUrl = determineRedirectUrl(request);
 		//log.debug("[Google OAuth2] 리다이렉션 URL: {}", redirectUrl);
+//		String html = """
+//            <html>
+//            <body>
+//                <script>
+//                    localStorage.setItem("accessToken", "%s");
+//                    window.location.href = "/main";
+//                </script>
+//            </body>
+//            </html>
+//            """.formatted(newAccessToken);
+
+		//response.setContentType("text/html;charset=UTF-8");
+		//response.getWriter().write(html);
 		//response.sendRedirect(redirectUrl);
+		response.sendRedirect("/main");
 	}
 }
 

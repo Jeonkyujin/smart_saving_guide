@@ -5,8 +5,10 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 
@@ -32,19 +34,20 @@ public abstract class AbstractOAuth2UserService extends SimpleUrlAuthenticationS
 	protected final UserService userService;
 	@Value("${token.access.header}")
 	protected String accessTokenHeader;
-	@Value("${token.refresh.expiration}")
-	protected String refreshTokenExpiresAt;
+	@Value("${token.access.expiration}")
+	protected String accessTokenExpiresAt;
 	@Value("${token.refresh.cookie.name}")
 	protected String refreshTokenCookieName;
 	@Value("${base-url}")
 	protected String baseUrl;
+	protected final ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
 	public abstract void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-		Authentication authentication) throws IOException, ServletException;
+												 Authentication authentication) throws IOException, ServletException;
 
-	public void addRefreshTokenToCookie(String refreshToken, HttpServletResponse response) {
-		Cookie cookie = new Cookie(refreshTokenCookieName, refreshToken);
+	public void addAccessTokenToCookie(String accessToken, HttpServletResponse response) {
+		Cookie cookie = new Cookie("Authorization", accessToken);
 
 		if (cookie.getValue() == null) {
 			cookie.setMaxAge(0);
@@ -52,12 +55,12 @@ public abstract class AbstractOAuth2UserService extends SimpleUrlAuthenticationS
 		}
 		cookie.setPath("/");
 		ZonedDateTime seoulTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
-		ZonedDateTime expirationTime = seoulTime.plusSeconds(Long.parseLong(refreshTokenExpiresAt));
+		ZonedDateTime expirationTime = seoulTime.plusSeconds(Long.parseLong(accessTokenExpiresAt));
 		cookie.setMaxAge((int)(expirationTime.toEpochSecond() - seoulTime.toEpochSecond()));
 		cookie.setSecure(true);
 		cookie.setHttpOnly(true);
 		response.addCookie(cookie);
-		log.debug("[Token] 리프레시 토큰 쿠키 생성 - name: {}, maxAge: {}", refreshTokenCookieName, cookie.getMaxAge());
+		log.debug("[Token] 엑세스 토큰 쿠키 생성 - name: {}, maxAge: {}", "accessToken", cookie.getMaxAge());
 	}
 
 	protected String determineRedirectUrl(HttpServletRequest request) {

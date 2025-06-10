@@ -76,7 +76,7 @@ public class JwtTokenProvider {
         Date expiredDate = new Date(System.currentTimeMillis() + expireTime);
         return Jwts.builder()
                 .setHeader(createHeader())
-                .setClaims(createClaims(user))
+                .setClaims(createClaims(user, role))
                 .setSubject(String.valueOf(userId))
                 .setExpiration(expiredDate)
                 .signWith(secretKey, SignatureAlgorithm.HS256)
@@ -90,9 +90,9 @@ public class JwtTokenProvider {
         return header;
     }
 
-    private Map<String, Object> createClaims(User user) {
+    private Map<String, Object> createClaims(User user, String role) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put(KEY_ROLE, user.getRole().name());
+        claims.put(KEY_ROLE, role);
         return claims;
     }
 
@@ -189,10 +189,16 @@ public class JwtTokenProvider {
 
 	private Authentication createAuthentication(Claims claims, String token) {
 		List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
+		System.out.println("createAuthentication" + Long.valueOf(claims.getSubject()));
 		User user = userRepository.findById(Long.valueOf(claims.getSubject()))
 			.orElseThrow();
-		UserDetails principal = principalDetailsService.loadUserByUsername(user.getEmail());
-		return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+		if (user.getPassword() != null) {
+			UserDetails principal = principalDetailsService.loadUserByUsername(user.getLoginId());
+			return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+		}else{
+			PrincipalDetails principal = new PrincipalDetails(user);
+			return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+		}
 	}
 
 	private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
@@ -208,6 +214,26 @@ public class JwtTokenProvider {
 				return new TokenException(TOKEN_NOT_FOUND);
 			});
 	}
+
+	public String extractAccessTokenFromCookie(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+
+		if (cookies == null) {
+			log.warn("[Token] 쿠키가 비어있습니다.");
+			throw new TokenException(TOKEN_NOT_FOUND);
+		}
+
+		return Arrays.stream(cookies)
+				.filter(cookie -> "Authorization".equals(cookie.getName()))
+				.map(Cookie::getValue)
+				.findFirst()
+				.orElseThrow(() -> {
+					log.warn("[Token] Authorization 쿠키가 존재하지 않습니다.");
+					return new TokenException(TOKEN_NOT_FOUND);
+				});
+	}
+
+
 
 	public Optional<String> extractRefreshTokenFromCookie(HttpServletRequest request) {
 		Optional<String> token = Optional.ofNullable(request.getCookies())
