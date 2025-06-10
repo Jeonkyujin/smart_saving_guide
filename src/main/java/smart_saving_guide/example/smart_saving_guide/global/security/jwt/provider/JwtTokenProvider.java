@@ -36,8 +36,6 @@ import static smart_saving_guide.example.smart_saving_guide.global.error.GlobalE
 
 @Slf4j
 @Component
-
-
 public class JwtTokenProvider {
 
     private final PrincipalDetailService principalDetailsService;
@@ -64,14 +62,7 @@ public class JwtTokenProvider {
 		this.userRepository = userRepository;
 	}
 
-//	@PostConstruct
-//	private void setSecretKey() {
-//		byte[] keyBytes = Base64.getDecoder().decode(key);
-//		secretKey = Keys.hmacShaKeyFor(keyBytes);
-//		log.debug("[Token] Secret Key 초기화 완료");
-//	}
-
-    private String generateToken(Long userId, String role, long expireTime) {
+	private String generateToken(Long userId, String role, long expireTime) {
         User user = userRepository.findById(userId).orElse(null);
         Date expiredDate = new Date(System.currentTimeMillis() + expireTime);
         return Jwts.builder()

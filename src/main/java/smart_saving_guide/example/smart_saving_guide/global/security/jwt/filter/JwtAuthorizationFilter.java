@@ -74,16 +74,14 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
         String accessToken = tokenProvider.extractAccessTokenFromCookie(request);
 
-
-
-
         log.debug("[Token] JwtAuthorizationFilter 토큰 검증 accessToken : {}", accessToken);
         TokenStatus tokenStatus = tokenProvider.validateAccessToken(accessToken);
         //시큐리티 컨텍스트에 인증 객체를 담는 것은 매 요청마다 필수적으로 해줘야함
         if (tokenStatus == TokenStatus.VALID) {
             setAuthentication(accessToken);
         } else if (tokenStatus == TokenStatus.EXPIRED) {
-            throw new TokenException(ACCESS_TOKEN_EXPIRED);
+            response.sendRedirect("/?expired=true");
+            return;
         } else {
             throw new TokenException(INVALID_TOKEN);
         }
