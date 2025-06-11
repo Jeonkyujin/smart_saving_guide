@@ -181,6 +181,7 @@ public class JwtTokenProvider {
 	private Authentication createAuthentication(Claims claims, String token) {
 		List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
 		//System.out.println("createAuthentication" + Long.valueOf(claims.getSubject()));
+		System.out.println("createAuthentication 실행");
 		User user = userRepository.findById(Long.valueOf(claims.getSubject()))
 			.orElseThrow();
 		if (user.getPassword() != null) {

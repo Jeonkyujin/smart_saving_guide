@@ -60,14 +60,6 @@ public class KakaoOAuth2UserService extends AbstractOAuth2UserService {
 			.build();
 		User newUser = userService.createUserForOAuth(user);
 
-		// ❗️provider 확인용 일회용 Authentication 저장
-		Authentication tempAuth = new UsernamePasswordAuthenticationToken(
-				new PrincipalDetails(user), null, List.of(new SimpleGrantedAuthority("ROLE_USER"))
-		);
-		SecurityContextHolder.getContext().setAuthentication(tempAuth);
-
-		response.sendRedirect("/oauth-success.html");
-
 
 		//jwt 토큰 생성
 		Token jwtToken = jwtTokenProvider.createToken(newUser.getId(), newUser.getRole());

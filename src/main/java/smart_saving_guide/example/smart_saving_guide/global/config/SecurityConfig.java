@@ -63,9 +63,10 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .logout(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
                         request.requestMatchers("/", "/loginForm", "/css/**", "/js/**", "/images/**", "IDCheck", "/oauth2/**", "/login/**", "/token/**", "/favicon.ico","/.well-known/**"
-                                ).permitAll()
+                                ,"/logout").permitAll()
                                 .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(OAuth2UserService))

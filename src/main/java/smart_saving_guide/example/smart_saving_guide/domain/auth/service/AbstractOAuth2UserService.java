@@ -52,7 +52,7 @@ public abstract class AbstractOAuth2UserService extends SimpleUrlAuthenticationS
 			cookie.setMaxAge(0);
 			log.debug("[Token] 리프레시 토큰 쿠키 삭제");
 		}
-		System.out.println("AccessTokenExpiresAt: " + accessTokenExpiresAt);
+
 		cookie.setPath("/");
 		ZonedDateTime seoulTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 		ZonedDateTime expirationTime = seoulTime.plusSeconds(Long.parseLong(accessTokenExpiresAt));

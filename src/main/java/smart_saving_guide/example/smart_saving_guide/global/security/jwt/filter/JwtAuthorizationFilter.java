@@ -39,8 +39,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             "/login/**",
             "/token/**",
             "/favicon.ico",
-            "/.well-known/**"
-
+            "/.well-known/**",
+            "/logout"
 
     };
 

@@ -1,7 +1,10 @@
 package smart_saving_guide.example.smart_saving_guide.domain.home;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -50,5 +53,16 @@ public class HomeController {
         }else{
             return new ResponseDto<>(1,"사용가능한 아이디입니다.", true);
         }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletResponse response){
+        SecurityContextHolder.clearContext();
+        Cookie cookie = new Cookie("Authorization", null);  // 또는 "Authorization"
+        cookie.setMaxAge(0);  // 즉시 만료
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }
