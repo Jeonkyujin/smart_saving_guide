@@ -13,25 +13,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
-import smart_saving_guide.example.smart_saving_guide.domain.auth.service.PrincipalDetails;
-import smart_saving_guide.example.smart_saving_guide.domain.user.entity.User;
-import smart_saving_guide.example.smart_saving_guide.domain.user.repository.UserRepository;
 import smart_saving_guide.example.smart_saving_guide.global.security.jwt.enums.TokenStatus;
 import smart_saving_guide.example.smart_saving_guide.global.security.jwt.exception.TokenException;
 import smart_saving_guide.example.smart_saving_guide.global.security.jwt.provider.JwtTokenProvider;
-
 import java.io.IOException;
 import java.util.Arrays;
-
-import static smart_saving_guide.example.smart_saving_guide.global.error.GlobalErrorCode.ACCESS_TOKEN_EXPIRED;
 import static smart_saving_guide.example.smart_saving_guide.global.error.GlobalErrorCode.INVALID_TOKEN;
 
 

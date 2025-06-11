@@ -1,6 +1,7 @@
 package smart_saving_guide.example.smart_saving_guide.global.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,6 +38,8 @@ public class SecurityConfig {
     private final DelegatingOAuth2LoginSuccessHandler delegatingOAuth2LoginSuccessHandler;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
+    @Value("${token.access.expiration}")
+    private String accessTokenExpiresAt;
 
 
     @Bean
@@ -47,7 +50,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
 
-        JwtAuthenticationFilter jwtAuthFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider, refreshTokenRepository);
+        JwtAuthenticationFilter jwtAuthFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenProvider, refreshTokenRepository, accessTokenExpiresAt);
         JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(jwtTokenProvider);
         //jwtAuthFilter.setFilterProcessesUrl("/login");
         // 이 부분이 핵심

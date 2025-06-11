@@ -8,7 +8,6 @@ import java.util.Optional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 
@@ -44,7 +43,7 @@ public abstract class AbstractOAuth2UserService extends SimpleUrlAuthenticationS
 
 	@Override
 	public abstract void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-												 Authentication authentication) throws IOException, ServletException;
+		Authentication authentication) throws IOException, ServletException;
 
 	public void addAccessTokenToCookie(String accessToken, HttpServletResponse response) {
 		Cookie cookie = new Cookie("Authorization", accessToken);
@@ -53,6 +52,7 @@ public abstract class AbstractOAuth2UserService extends SimpleUrlAuthenticationS
 			cookie.setMaxAge(0);
 			log.debug("[Token] 리프레시 토큰 쿠키 삭제");
 		}
+		System.out.println("AccessTokenExpiresAt: " + accessTokenExpiresAt);
 		cookie.setPath("/");
 		ZonedDateTime seoulTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
 		ZonedDateTime expirationTime = seoulTime.plusSeconds(Long.parseLong(accessTokenExpiresAt));

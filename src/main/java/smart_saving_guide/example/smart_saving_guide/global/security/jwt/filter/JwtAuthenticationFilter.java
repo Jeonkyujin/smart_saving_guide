@@ -38,9 +38,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    @Value("${token.access.expiration}")
-    protected String accessTokenExpiresAt;
+    private final long accessTokenExpiresIn;
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager,
+                                   JwtTokenProvider jwtTokenProvider,
+                                   RefreshTokenRepository refreshTokenRepository,
+                                   @Value("${token.access.expiration}") String accessTokenExpiresAt) {
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.refreshTokenRepository = refreshTokenRepository;
+        this.accessTokenExpiresIn = Long.parseLong(accessTokenExpiresAt);
+    }
+
+
 
 
     //login 요청을 하면 로그인 시도를 위해서 실행되는 함수
@@ -104,9 +113,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             cookie.setMaxAge(0);
             log.debug("[Token] 리프레시 토큰 쿠키 삭제");
         }
+        //System.out.println("accessTokenExpiresAt: " + accessTokenExpiresAt);
         cookie.setPath("/");
         ZonedDateTime seoulTime = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
-        ZonedDateTime expirationTime = seoulTime.plusSeconds(Long.parseLong(accessTokenExpiresAt));
+        ZonedDateTime expirationTime = seoulTime.plusSeconds(accessTokenExpiresIn);
         cookie.setMaxAge((int) (expirationTime.toEpochSecond() - seoulTime.toEpochSecond()));
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
