@@ -64,7 +64,8 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/", "/loginForm", "/css/**", "/js/**", "/images/**", "IDCheck", "/oauth2/**", "/login/**", "/oauth-success.html", "/normal-success.html", "/token/**").permitAll()
+                        request.requestMatchers("/", "/loginForm", "/css/**", "/js/**", "/images/**", "IDCheck", "/oauth2/**", "/login/**", "/token/**", "/favicon.ico","/.well-known/**"
+                                ).permitAll()
                                 .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(OAuth2UserService))

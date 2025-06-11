@@ -55,7 +55,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     //login 요청을 하면 로그인 시도를 위해서 실행되는 함수
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        System.out.println("JwtAuthenticationFilter: 로그인 시도중");
+        //System.out.println("JwtAuthenticationFilter: 로그인 시도중");
 
         //1.username, password를 받아서
 
@@ -69,7 +69,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Authentication authentication = authenticationManager.authenticate(authRequestToken);
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        System.out.println(principalDetails.getUser().getLoginId());
+        //System.out.println(principalDetails.getUser().getLoginId());
         //authentication 객체가 세션 영역에 저장됨
         return authentication;
 
@@ -80,7 +80,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     //jwt 토큰을 만들어서 request 요청한 사용자에게 JWT 토큰을 response 하면됨
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        System.out.println("successfulAuthentication 이 실행됨");
+        //System.out.println("successfulAuthentication 이 실행됨");
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
         Token jwtToken = jwtTokenProvider.createToken(principalDetails.getUser().getId(), principalDetails.getUser().getRole());

@@ -26,8 +26,6 @@ import static smart_saving_guide.example.smart_saving_guide.global.error.GlobalE
 
 
 @Slf4j
-
-
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private static final String[] WHITE_LIST = {
@@ -39,9 +37,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             "/IDCheck",
             "/oauth2/**",
             "/login/**",
-            "/oauth-success.html",
-            "/normal-success.html",
-            "/token/**"
+            "/token/**",
+            "/favicon.ico",
+            "/.well-known/**"
+
 
     };
 
@@ -55,7 +54,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-
+        //System.out.println("request Uri" + request.getRequestURI());
         // white list 또는 인증/로그인 관련 경로면 토큰 검증을 건너뜁니다.
         if (shouldNotFilter(request)) {
 
@@ -75,7 +74,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         } else {
             throw new TokenException(INVALID_TOKEN);
         }
-        System.out.println("not error");
+        //System.out.println("not error");
         filterChain.doFilter(request, response);
     }
 
